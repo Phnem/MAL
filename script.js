@@ -1,8 +1,5 @@
-// === НАСТРОЙКИ (ТВОЙ ID УЖЕ ВСТАВЛЕН) ===
-const BLOB_ID = '019ae59e-d6cd-78dc-9d94-edb43c4c2d9c'; 
-// ========================================
-
-const URL = `https://jsonblob.com/api/jsonBlob/${BLOB_ID}`;
+// === ТОЛЬКО ЭТА ССЫЛКА, БЕЗ CORSPROXY ===
+const URL = 'https://jsonblob.com/api/jsonBlob/019ae59e-d6cd-78dc-9d94-edb43c4c2d9c';
 let animeData = [];
 
 // DOM элементы
@@ -209,4 +206,5 @@ deleteBtn.addEventListener('click', async () => {
         closeModal();
         await saveToCloud();
     }
+
 });
