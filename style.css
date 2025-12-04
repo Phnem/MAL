@@ -39,7 +39,7 @@ body {
     background-repeat: no-repeat;
     
     /* ИСПОЛЬЗУЕМ ОБЫЧНЫЙ FILTER */
-    filter: blur(7px);
+    filter: blur(5px);
     
     /* ВАЖНО: Размытие делает края полупрозрачными. 
        Чтобы не было белых рамок по бокам экрана, 
@@ -208,6 +208,5 @@ option { background-color: #1c1c1e; color: white; }
     cursor: pointer; transition: transform 0.2s;
 }
 .fab:active { transform: scale(0.95); }
-
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
