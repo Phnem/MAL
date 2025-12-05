@@ -25,6 +25,14 @@ body {
     min-height: 100vh;
 }
 
+/* === ХОВЕР ЭФФЕКТ ТОЛЬКО ДЛЯ ПК === */
+body.is-desktop .anime-card:hover {
+    transform: scale(1.1); /* Увеличение на 10% */
+    z-index: 10;           /* ВАЖНО: поднимаем слой, чтобы карточка перекрывала соседей */
+    background: rgba(0, 0, 0, 0.6); /* Чуть темнее фон для контраста */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Усиливаем тень */
+}
+
 .bg-pattern {
     position: fixed; 
     top: 0; 

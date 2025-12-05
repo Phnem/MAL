@@ -1,19 +1,41 @@
-// === ЛОГИКА СТЕКЛА (ТЕКСТУРА) ===
-const svgImage = document.getElementById("displacement-map-image");
-if (svgImage) {
-    // Эта картинка создает эффект искажения на стекле
-    fetch("https://raw.githubusercontent.com/essykings/JavaScript/main/map.png")
-      .then((response) => response.blob())
-      .then((blob) => {
-        const objURL = URL.createObjectURL(blob);
-        svgImage.setAttribute("href", objURL);
-      })
-      .catch(e => console.log("Ошибка загрузки текстуры стекла:", e));
+function detectDevice() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+        document.body.classList.add('is-mobile');
+        document.body.classList.remove('is-desktop');
+        console.log("Device: Mobile");
+    } else {
+        document.body.classList.add('is-desktop');
+        document.body.classList.remove('is-mobile');
+        console.log("Device: Desktop (PC)");
+    }
 }
+
+// Запускаем сразу при загрузке
+detectDevice();
+// === ЛОГИКА СТЕКЛА (ТЕКСТУРА И ПРЕЛОМЛЕНИЕ) ===
+// Функция из статьи Habr для имитации background-attachment: fixed
+const updateDataJSBackgroundAttachmentFixedElements = () => {
+    const elements = document.querySelectorAll("[data-js-background-attachment-fixed]");
+    for (const element of elements) {
+        if (!(element instanceof HTMLElement)) continue;
+        const clientRect = element.getBoundingClientRect();
+        // Двигаем фон противоположно скроллу
+        element.style.backgroundPositionX = `${(-clientRect.x).toString()}px`;
+        element.style.backgroundPositionY = `${(-clientRect.y).toString()}px`;
+    }
+};
+
+const initDataJSBackgroundAttachmentFixed = () => {
+    requestAnimationFrame(() => {
+        updateDataJSBackgroundAttachmentFixedElements();
+        initDataJSBackgroundAttachmentFixed();
+    });
+};
 
 // === НАСТРОЙКИ БАЗЫ ДАННЫХ ===
 const BLOB_ID = '019ae59e-d6cd-78dc-9d94-edb43c4c2d9c'; 
-// Используем прокси для обхода CORS на хостинге
 const API_URL = 'https://corsproxy.io/?' + encodeURIComponent('https://jsonblob.com/api/jsonBlob/' + BLOB_ID);
 
 let animeData = [];
@@ -33,6 +55,8 @@ const totalCountEl = document.getElementById('totalCount');
 // === ЗАПУСК ===
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
+    // Запускаем анимацию света из статьи
+    initDataJSBackgroundAttachmentFixed();
 });
 
 // === ЗАГРУЗКА ДАННЫХ ===
@@ -42,10 +66,7 @@ async function loadData() {
     try {
         const response = await fetch(API_URL, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
         });
         
         if (!response.ok) throw new Error('Ошибка загрузки');
@@ -70,17 +91,14 @@ async function saveToCloud() {
     try {
         const response = await fetch(API_URL, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify(animeData)
         });
 
         if (!response.ok) throw new Error('Ошибка сохранения');
 
     } catch (error) {
-        alert('Не удалось сохранить в облако! Проверь интернет.');
+        alert('Не удалось сохранить в облако!');
         console.error(error);
     } finally {
         addBtn.innerHTML = oldText;
@@ -104,8 +122,8 @@ function renderList(data) {
 
     data.forEach((item, index) => {
         const card = document.createElement('div');
-        card.className = 'anime-card';
-        // Небольшая задержка анимации
+        // ДОБАВЛЯЕМ КЛАСС glass-panel ДЛЯ ЭФФЕКТА
+        card.className = 'anime-card glass-panel';
         if(index < 20) card.style.animationDelay = `${index * 0.03}s`;
         
         card.onclick = () => openEditModal(item.id);
@@ -113,7 +131,6 @@ function renderList(data) {
         const firstLetter = item.title ? item.title[0].toUpperCase() : '?';
         const hue = (item.id * 137) % 360; 
 
-        // АВТО-ИСПРАВЛЕНИЕ ССЫЛОК IMGUR
         let finalImage = item.image;
         if (finalImage && finalImage.toLowerCase().includes('imgur.com') && !finalImage.match(/\.(jpeg|jpg|gif|png)$/i)) {
              const code = finalImage.split('/').pop();
@@ -127,6 +144,8 @@ function renderList(data) {
         const imgContent = finalImage ? '' : firstLetter;
 
         card.innerHTML = `
+            <div class="glass-light" data-js-background-attachment-fixed></div>
+
             <div class="card-img" style="${bgStyle}">
                 ${imgContent}
             </div>
@@ -237,7 +256,6 @@ deleteBtn.addEventListener('click', async () => {
     }
 });
 
-// === СБРОС (ДЛЯ КНОПКИ В ХЕДЕРЕ) ===
 function resetData() {
     if(confirm('Перезагрузить страницу?')) {
         location.reload();
