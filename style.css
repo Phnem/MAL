@@ -27,10 +27,10 @@ body {
 
 /* === ХОВЕР ЭФФЕКТ ТОЛЬКО ДЛЯ ПК === */
 body.is-desktop .anime-card:hover {
-    transform: scale(1.1); /* Увеличение на 10% */
-    z-index: 10;           /* ВАЖНО: поднимаем слой, чтобы карточка перекрывала соседей */
-    background: rgba(0, 0, 0, 0.6); /* Чуть темнее фон для контраста */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* Усиливаем тень */
+    transform: scale(1.07); 
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.65);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 }
 
 .bg-pattern {
@@ -135,13 +135,32 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
 .anime-list { display: flex; flex-direction: column; gap: 12px; }
 
 .anime-card {
-    padding: 12px 15px; display: flex; align-items: center; gap: 15px; cursor: pointer;
+    /* ... ваши старые настройки (padding, display, gap и т.д.) оставьте как есть ... */
+    padding: 12px 15px; 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    cursor: pointer;
+    
+    /* Фон по умолчанию */
     background: rgba(0, 0, 0, 0.5); 
-    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+    
+    /* Эти фильтры оставляем */
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: transform 0.2s; animation: slideUp 0.4s ease forwards;
+
+    /* === ГЛАВНОЕ ИЗМЕНЕНИЕ ЗДЕСЬ === */
+    /* Мы говорим: "Меняй фон, трансформацию, тень и границы за 0.3 секунды" */
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                background-color 0.3s ease,
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+    
+    /* Убедитесь, что тут нет слова 'forwards' */
+    animation: slideUp 0.4s ease; 
 }
 .anime-card:active { transform: scale(0.98); background: rgba(0, 0, 0, 0.7); }
 
