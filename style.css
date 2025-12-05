@@ -238,3 +238,15 @@ option { background-color: #1c1c1e; color: white; }
 .fab:active { transform: scale(0.95); }
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+/* === ЭФФЕКТ "РЫБИЙ ГЛАЗ" ДЛЯ ТЕЛЕФОНОВ === */
+body.is-mobile .anime-card {
+    /* Отключаем плавную анимацию размера на телефоне, 
+       иначе скролл будет казаться "ватным" и запаздывающим.
+       Оставляем плавность только для цвета/тени. */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    
+    /* Сообщаем браузеру, что этот элемент будет часто менять размер,
+       чтобы он перенес вычисления на видеокарту */
+    will-change: transform;
+}

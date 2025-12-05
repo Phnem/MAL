@@ -106,11 +106,11 @@ async function saveToCloud() {
     }
 }
 
-// === ОТРИСОВКА СПИСКА ===
 function renderList(data) {
     animeListEl.innerHTML = '';
     if(totalCountEl) totalCountEl.textContent = data.length;
     
+    // Если пусто
     if (data.length === 0) {
         animeListEl.innerHTML = `
             <div style="text-align:center; color:#999; margin-top:50px;">
@@ -120,9 +120,9 @@ function renderList(data) {
         return;
     }
 
+    // Цикл создания карточек
     data.forEach((item, index) => {
         const card = document.createElement('div');
-        // ДОБАВЛЯЕМ КЛАСС glass-panel ДЛЯ ЭФФЕКТА
         card.className = 'anime-card glass-panel';
         if(index < 20) card.style.animationDelay = `${index * 0.03}s`;
         
@@ -162,6 +162,9 @@ function renderList(data) {
         `;
         animeListEl.appendChild(card);
     });
+
+    // === ВОТ ТУТ НОВАЯ СТРОКА ===
+    requestAnimationFrame(initMobileScrollEffect);
 }
 
 // === ПОИСК И СОРТИРОВКА ===
@@ -261,3 +264,45 @@ function resetData() {
         location.reload();
     }
 }
+
+// === ЭФФЕКТ FISHEYE (ПАПИРУС) ДЛЯ ТЕЛЕФОНОВ ===
+function initMobileScrollEffect() {
+    // Если это не телефон, выходим и ничего не делаем
+    if (!document.body.classList.contains('is-mobile')) return;
+
+    const cards = document.querySelectorAll('.anime-card');
+    const centerY = window.innerHeight / 2; // Центр экрана по вертикали
+    const maxDist = window.innerHeight / 1.5; // Дистанция, где эффект достигает максимума (края)
+
+    cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        // Центр конкретной карточки
+        const cardCenterY = rect.top + (rect.height / 2);
+
+        // Расстояние от центра экрана до центра карточки (по модулю)
+        const distance = Math.abs(centerY - cardCenterY);
+
+        let scale = 1;
+
+        // Если карточка в пределах зоны действия эффекта
+        if (distance < maxDist) {
+            // Считаем коэффициент уменьшения (0..1)
+            const factor = distance / maxDist;
+            // Уменьшаем от 1.0 до 0.9 (то есть на 10%)
+            scale = 1 - (factor * 0.1); 
+        } else {
+            // Если совсем далеко — фиксируем минимальный размер
+            scale = 0.9;
+        }
+
+        // Применяем масштаб
+        card.style.transform = `scale(${scale})`;
+    });
+}
+
+// Запускаем эффект при скролле (используем requestAnimationFrame для плавности 60 FPS)
+window.addEventListener('scroll', () => {
+    if (document.body.classList.contains('is-mobile')) {
+        window.requestAnimationFrame(initMobileScrollEffect);
+    }
+});
