@@ -163,7 +163,6 @@ function renderList(data) {
         animeListEl.appendChild(card);
     });
 
-    // === ВОТ ТУТ НОВАЯ СТРОКА ===
     requestAnimationFrame(updateFisheyeEffect);
 }
 
@@ -265,27 +264,27 @@ function resetData() {
     }
 }
 
-// === ЭФФЕКТ FISHEYE (РЫБИЙ ГЛАЗ) ДЛЯ ВСЕХ ===
-// === ЭФФЕКТ FISHEYE (ОБНОВЛЕННЫЙ ПОД ШИРОКИЙ ЭКРАН) ===
 function updateFisheyeEffect() {
-    const cards = document.querySelectorAll('.anime-card');
-    const height = window.innerHeight; // Высота экрана сейчас
-    const centerY = height / 2;
-    
-    // === ИЗМЕНЕНИЕ ЗДЕСЬ ===
-    // Раньше было фиксировано 110px. 
-    // Теперь это 25% от высоты экрана.
-    // На телефоне это будет ~200px, на ПК ~270px (зона 100% масштаба станет шире)
-    const safeZone = height * 0.25; 
-    
-    // Максимальная дистанция тоже зависит от экрана
-    const maxDist = height * 0.6; 
+    // getElementsByClassName возвращает "Живой список". 
+    // Он работает мгновенно и сам знает, когда добавились новые карточки.
+    const liveCards = document.getElementsByClassName('anime-card');
 
-    cards.forEach(card => {
-        // На ПК при наведении отключаем сжатие
-        if (card.matches(':hover')) {
-             card.style.transform = ''; 
-             return;
+    // Если карточек нет — просто уходим, экономим ресурсы
+    if (liveCards.length === 0) return;
+
+    const height = window.innerHeight;
+    const centerY = height / 2;
+    const safeZone = height * 0.25;
+    const maxDist = height * 0.6;
+    
+    // Используем обычный цикл for — это самый быстрый способ перебора в JS (быстрее forEach)
+    // Это важно для 120 FPS
+    for (let i = 0; i < liveCards.length; i++) {
+        const card = liveCards[i];
+
+        // === ИСПРАВЛЕНИЕ РЫВКА (ОСТАВЛЯЕМ КАК БЫЛО) ===
+        if (document.body.classList.contains('is-desktop') && card.matches(':hover')) {
+             continue; // Пропускаем эту итерацию цикла
         }
 
         const rect = card.getBoundingClientRect();
@@ -297,16 +296,13 @@ function updateFisheyeEffect() {
         if (distance > safeZone) {
             const activeDistance = distance - safeZone;
             const effectiveMax = maxDist - safeZone;
-
             let factor = activeDistance / effectiveMax;
-            if (factor > 1) factor = 1; 
-
-            // Сжимаем до 85% по краям
-            scale = 1 - (factor * 0.15); 
+            if (factor > 1) factor = 1;
+            scale = 1 - (factor * 0.15);
         }
 
         card.style.transform = `scale(${scale})`;
-    });
+    }
 }
 
 // Запускаем эффект при скролле (без проверок)

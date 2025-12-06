@@ -23,6 +23,7 @@ body {
 
     padding-bottom: 120px;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* === ХОВЕР ЭФФЕКТ ТОЛЬКО ДЛЯ ПК === */
@@ -37,8 +38,9 @@ body.is-desktop .anime-card:hover {
     position: fixed; 
     top: 0; 
     left: 0; 
-    width: 100%; 
-    height: 100%; 
+    /* ИЗМЕНЕНИЕ 1: Вместо 100% используем viewport units, чтобы игнорировать скроллбары */
+    width: 100vw; 
+    height: 100vh; 
     z-index: -1;
     
     background-image: url("bpV.png");
@@ -46,14 +48,18 @@ body.is-desktop .anime-card:hover {
     background-position: center;
     background-repeat: no-repeat;
     
-    /* ИСПОЛЬЗУЕМ ОБЫЧНЫЙ FILTER */
-    filter: hue-rotate(15px);
-    filter: brightness(-25%);
+    filter: hue-rotate(15px) brightness(-25%);
+    transform: scale(1.1);
+    
+    /* ИЗМЕНЕНИЕ 2: Говорим браузеру не перерисовывать этот слой каждый кадр */
+    will-change: transform; 
+    backface-visibility: hidden; /* Убирает микро-дрожание в Chrome/Safari */
+
     
     /* ВАЖНО: Размытие делает края полупрозрачными. 
        Чтобы не было белых рамок по бокам экрана, 
        нужно немного увеличить картинку */
-    transform: scale(1.1);
+    transform: scale(1);
 }
 
 /* 2. Горизонтальный (для ПК/Планшетов) */
@@ -163,6 +169,10 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
     align-items: center; 
     gap: 15px; 
     cursor: pointer;
+    will-change: transform; 
+    
+    /* Это хак, который включает аппаратное ускорение на старых WebKit движках */
+    transform: translateZ(0);
     
     /* Фон по умолчанию */
     background: rgba(0, 0, 0, 0.5); 
@@ -246,18 +256,52 @@ option { background-color: #1c1c1e; color: white; }
 .delete-btn { width: 100%; padding: 16px; background: rgba(255, 69, 58, 0.15); color: var(--danger); border: none; border-radius: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; }
 
 /* === FAB (КНОПКА ДОБАВИТЬ) === */
-.fab-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1500; }
-.fab { 
-    /* ИЗМЕНЕНИЕ: Вернули фиолетовый градиент */
-    background: var(--primary-gradient); 
-    color: white; border: none;
-    padding: 14px 28px; border-radius: 50px; 
-    font-size: 1rem; font-weight: 600; 
-    display: flex; align-items: center; gap: 10px; 
-    box-shadow: 0 8px 25px rgba(108, 92, 231, 0.5); 
-    cursor: pointer; transition: transform 0.2s;
+.fab-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateZ(0); z-index: 1500; 
+    will-change: transform; }
+.fab {
+    /* === РАЗМЕР И ФОРМА === */
+    width: 60px;       /* Фиксированный размер */
+    height: 60px;
+    border-radius: 50%; /* Идеальный круг */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;        /* Убираем старые отступы */
+    
+    /* === СТЕКЛЯННЫЙ СТИЛЬ === */
+    /* Используем те же принципы, что и в поиске, но чуть прозрачнее */
+    background: rgba(20, 20, 25, 0.3); 
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
+    /* Яркая тонкая рамка, чтобы кнопка не потерялась на фоне контента */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    /* Глубокая тень для объема */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    
+    color: white;
+    font-size: 1.6rem; /* Иконка покрупнее */
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
 }
-.fab:active { transform: scale(0.95); }
+
+/* Эффект нажатия: кнопка чуть вдавливается и светлеет */
+.fab:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Опционально: на ПК при наведении легкое свечение */
+@media (hover: hover) {
+    .fab:hover {
+        background: rgba(20, 20, 25, 0.5);
+        border-color: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15);
+    }
+}
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -270,7 +314,7 @@ option { background-color: #1c1c1e; color: white; }
 /* === ХОВЕР ЭФФЕКТ ДЛЯ ПК === */
 body.is-desktop .anime-card:hover {
     /* Добавляем !important, чтобы перебить JS-скрипт скролла */
-    transform: scale(1.08) translateZ(0) !important; 
+    transform: scale(1.02) translateZ(0) !important; 
     
     z-index: 100; 
     background-color: rgba(20, 20, 25, 0.9); 
