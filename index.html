@@ -34,14 +34,26 @@
                 <i class="fa-solid fa-times clear-search" id="clearSearch" style="display: none;"></i>
             </div>
             
-            <div class="sort-row">
-                <select id="sortSelect">
-                    <option value="newest">По дате добавления</option>
-                    <option value="rating_desc">Сначала высокий рейтинг</option>
-                    <option value="rating_asc">Сначала низкий рейтинг</option>
-                    <option value="episodes_desc">По количеству серий</option>
-                </select>
-            </div>
+            <div class="custom-select sort-style" id="sortCustom">
+    <select id="sortSelect" style="display: none;">
+        <option value="newest">По дате добавления</option>
+        <option value="rating_desc">Сначала высокий рейтинг</option>
+        <option value="rating_asc">Сначала низкий рейтинг</option>
+        <option value="episodes_desc">По количеству серий</option>
+    </select>
+
+    <div class="select-trigger">
+        <span class="trigger-text">По дате добавления</span>
+        <i class="fa-solid fa-chevron-down"></i>
+    </div>
+
+    <div class="select-options">
+        <div class="option" data-value="newest">По дате добавления</div>
+        <div class="option" data-value="rating_desc">Сначала высокий рейтинг</div>
+        <div class="option" data-value="rating_asc">Сначала низкий рейтинг</div>
+        <div class="option" data-value="episodes_desc">По количеству серий</div>
+    </div>
+</div>
         </div>
 
         <div class="anime-list" id="animeList"></div>
@@ -80,15 +92,31 @@
                         <input type="number" id="episodesInput" required class="glass-input" placeholder="12">
                     </div>
                     <div class="input-group" style="flex:1;">
-                        <label>Оценка</label>
-                        <select id="ratingInput" class="glass-input">
-                            <option value="5">5 ★★★★★</option>
-                            <option value="4">4 ★★★★</option>
-                            <option value="3">3 ★★★</option>
-                            <option value="2">2 ★★</option>
-                            <option value="1">1 ★</option>
-                        </select>
-                    </div>
+    <label>Оценка</label>
+    
+    <div class="custom-select input-style" id="ratingCustom">
+        <select id="ratingInput" style="display: none;">
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+        </select>
+
+        <div class="select-trigger">
+            <span class="trigger-text">5 <span class="stars">★★★★★</span></span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        
+        <div class="select-options">
+            <div class="option" data-value="5">5 <span class="stars">★★★★★</span></div>
+            <div class="option" data-value="4">4 <span class="stars">★★★★</span></div>
+            <div class="option" data-value="3">3 <span class="stars">★★★</span></div>
+            <div class="option" data-value="2">2 <span class="stars">★★</span></div>
+            <div class="option" data-value="1">1 <span class="stars">★</span></div>
+        </div>
+    </div>
+</div>
                 </div>
 
                 <button type="submit" class="save-btn">Сохранить</button>

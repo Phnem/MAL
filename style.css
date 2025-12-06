@@ -359,3 +359,143 @@ body.is-desktop .anime-card:hover {
 .is-mobile .anime-card:active {
     transform: scale(0.90); /* Чуть-чуть реагирует на нажатие */
 }
+
+/* === ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СЕЛЕКТОВ === */
+.custom-select {
+    position: relative;
+    user-select: none;
+    width: 100%;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.select-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+}
+
+.select-trigger i {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+    margin-left: 10px;
+}
+
+/* Поворот стрелки */
+.custom-select.open .select-trigger i { transform: rotate(180deg); }
+
+/* Выпадающий список (общий) */
+/* Выпадающий список (общий) */
+.select-options {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    
+    /* === ИСПРАВЛЕНИЕ: ЖИДКОЕ СТЕКЛО === */
+    /* Делаем фон полупрозрачным и темным */
+    background: rgba(20, 20, 25, 0.6); 
+    
+    /* Сильное размытие + насыщенность (эффект премиум стекла) */
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    
+    /* Тонкая светлая обводка */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    
+    border-radius: 16px; /* Чуть больше скругление */
+    
+    /* Глубокая тень для отрыва от фона */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); /* Пружинистая анимация */
+    overflow: hidden;
+}
+
+.custom-select.open .select-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(5px); /* Небольшой отступ от кнопки */
+}
+
+.option {
+    padding: 12px 16px; /* Чуть просторнее */
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: 0.2s;
+    /* Разделитель едва заметный */
+    border-bottom: 1px solid rgba(255,255,255,0.03); 
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.option:last-child { border-bottom: none; }
+
+/* Ховер: не просто серый, а светлое стекло */
+.option:hover { 
+    background: rgba(255, 255, 255, 0.15); 
+    color: white;
+    padding-left: 20px; /* Легкий сдвиг вправо при наведении */
+}
+
+/* === ВАРИАНТ 1: СОРТИРОВКА (в шапке) === */
+.sort-style .select-trigger {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px; /* Более округлый */
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.sort-style .select-trigger:hover {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* === ВАРИАНТ 2: ИНПУТ (в модалке) === */
+.input-style .select-trigger {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px; /* Как у других инпутов */
+    padding: 14px;
+    font-size: 1rem;
+}
+.input-style .select-trigger:hover {
+    border-color: var(--primary); 
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.stars { color: #ffd60a; margin-left: 5px; }
+
+/* === ИСПРАВЛЕНИЕ СОРТИРОВКИ === */
+.custom-select.sort-style {
+    /* 1. Убираем растягивание на всю ширину */
+    width: fit-content; 
+    min-width: 220px; /* Минимальная ширина, чтобы текст влезал */
+    
+    /* 2. Центрируем блок */
+    margin: 10px auto 0 auto; 
+    
+    /* 3. ВКЛЮЧАЕМ КЛИКИ (Важно! Иначе через search-section не нажмется) */
+    pointer-events: auto; 
+}
+
+/* На мобильных (если экран узкий) можно дать чуть больше места */
+@media (max-width: 480px) {
+    .custom-select.sort-style {
+        width: 90%; /* На телефонах пусть будет почти во всю ширину */
+        min-width: auto;
+    }
+}
+
+/* Исправляем позицию выпадающего списка у сортировки, чтобы он был ровно под кнопкой */
+.sort-style .select-options {
+    width: 100%; /* Ширина списка равна ширине кнопки */
+    text-align: left; /* Текст внутри выровнять по левому краю */
+}
