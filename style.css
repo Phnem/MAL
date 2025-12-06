@@ -499,3 +499,24 @@ body.is-desktop .anime-card:hover {
     width: 100%; /* Ширина списка равна ширине кнопки */
     text-align: left; /* Текст внутри выровнять по левому краю */
 }
+
+/* На мобильных делаем кнопку компактной */
+@media (max-width: 480px) {
+    .custom-select.sort-style {
+        /* Было: width: 90%; */
+        /* Стало: fit-content (ширина ровно по тексту) */
+        width: fit-content; 
+        
+        /* Можно убрать min-width, чтобы кнопка могла быть совсем маленькой */
+        min-width: auto;
+        
+        /* Но ограничим, чтобы она не вылезала за края, если текст супер-длинный */
+        max-width: 90%;
+    }
+    
+    /* Чуть уменьшим шрифт на телефоне, чтобы выглядело аккуратнее */
+    .sort-style .select-trigger {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
