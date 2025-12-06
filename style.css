@@ -1,18 +1,13 @@
 :root {
-    /* === ОСНОВНЫЕ ЦВЕТА === */
-    --bg-color: #f2f2f7; 
-    
-    /* === НАСТРОЙКИ СТЕКЛА (ОЧЕНЬ ПРОЗРАЧНОЕ) === */
-    --glass-bg: rgba(15, 15, 20, 0.30); 
+    --bg-color: #f2f2f7;
+    --glass-bg: rgba(15, 15, 20, 0.30);
     --glass-border: 1px solid rgba(255, 255, 255, 0.15);
-    --glass-blur: 25px; 
+    --glass-blur: 25px;
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-    
     --primary: #6c5ce7;
-    --primary-gradient: linear-gradient(135deg, #6c5ce7, #a29bfe); /* Вернул градиент */
-    --text-on-glass: #ffffff; 
-    --text-sec: #b0b0b0;      
-    
+    --primary-gradient: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    --text-on-glass: #ffffff;
+    --text-sec: #b0b0b0;
     --danger: #ff453a;
     --gold: #ffd60a;
 }
@@ -20,85 +15,47 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
 
 body {
-
     padding-bottom: 120px;
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* === ХОВЕР ЭФФЕКТ ТОЛЬКО ДЛЯ ПК === */
-body.is-desktop .anime-card:hover {
-    transform: scale(1.07); 
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.65);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-}
-
+/* === BACKGROUND === */
 .bg-pattern {
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    /* ИЗМЕНЕНИЕ 1: Вместо 100% используем viewport units, чтобы игнорировать скроллбары */
-    width: 100vw; 
-    height: 100vh; 
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
     z-index: -1;
-    
     background-image: url("bpV.png");
-    background-size: cover; 
-    background-position: center;
-    background-repeat: no-repeat;
-    
+    background-size: cover; background-position: center; background-repeat: no-repeat;
     filter: hue-rotate(15px) brightness(-25%);
-    transform: scale(1.1);
-    
-    /* ИЗМЕНЕНИЕ 2: Говорим браузеру не перерисовывать этот слой каждый кадр */
-    will-change: transform; 
-    backface-visibility: hidden; /* Убирает микро-дрожание в Chrome/Safari */
-
-    
-    /* ВАЖНО: Размытие делает края полупрозрачными. 
-       Чтобы не было белых рамок по бокам экрана, 
-       нужно немного увеличить картинку */
     transform: scale(1);
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
-/* 2. Горизонтальный (для ПК/Планшетов) */
 @media (orientation: landscape) {
-    .bg-pattern {
-        /* Файл bpH.png */
-        background-image: url("bpH.png");
-    }
+    .bg-pattern { background-image: url("bpH.png"); }
 }
 
-.app-container { 
-    width: 100%;
-    /* На телефонах оставляем узким, как было */
-    max-width: 600px; 
-    margin: 0 auto; 
-    padding: 20px; 
-    transition: max-width 0.3s ease; /* Чтобы при повороте экрана ширина менялась плавно */
+/* === LAYOUT === */
+.app-container {
+    width: 100%; max-width: 600px;
+    margin: 0 auto; padding: 20px;
+    transition: max-width 0.3s ease;
 }
 
-/* === НАСТРОЙКИ ДЛЯ ГОРИЗОНТАЛЬНОГО РЕЖИМА И ПК === */
+/* PC / Landscape Tweaks */
+body.is-desktop .app-container { max-width: 1200px; }
 
-/* 1. Если это ПК (определенный скриптом) */
-body.is-desktop .app-container {
-    max-width: 1200px; /* Растягиваем до 1200px (или поставь 90%, если хочешь еще шире) */
-}
-
-/* 2. Если это просто телефон, но повернутый горизонтально */
 @media (orientation: landscape) and (max-height: 600px) {
-    .app-container {
-        max-width: 100%; /* На весь экран */
-        padding: 10px 40px; /* Чуть больше отступов по бокам */
-    }
+    .app-container { max-width: 100%; padding: 10px 40px; }
 }
 
 /* === HEADER === */
 header {
     display: flex; justify-content: space-between; align-items: center;
     position: sticky; top: 10px; z-index: 1000;
-    background: rgba(10, 10, 15, 0.25); 
+    background: rgba(10, 10, 15, 0.25);
     backdrop-filter: blur(var(--glass-blur)) saturate(180%);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
     border: var(--glass-border);
@@ -108,11 +65,11 @@ header {
 }
 
 .logo { display: flex; align-items: center; gap: 12px; }
-.icon-box { 
-    width: 38px; height: 38px; 
-    background: var(--primary-gradient); /* Градиент иконки */
-    border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-    color: white; font-size: 1rem; 
+.icon-box {
+    width: 38px; height: 38px;
+    background: var(--primary-gradient);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1rem;
     box-shadow: 0 4px 15px rgba(108, 92, 231, 0.5);
 }
 h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
@@ -121,19 +78,21 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
 .stats-badge { font-size: 0.85rem; color: var(--text-sec); font-weight: 600; }
 .settings-btn { background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer; opacity: 0.9; }
 
-/* === ПОИСК === */
+/* === SEARCH SECTION === */
 .search-section {
     position: sticky; top: 85px; z-index: 900;
-    margin-bottom: 20px; pointer-events: none;
+    margin-bottom: 30px; /* Отступ чтобы сортировка не налезала на список */
+    pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
 
 .search-bar {
     pointer-events: auto;
-    width: 85%; margin: 0 auto; 
+    width: 85%; margin: 0 auto;
     background: rgba(10, 10, 15, 0.20);
-    backdrop-filter: blur(30px) saturate(200%); 
+    backdrop-filter: blur(30px) saturate(200%);
     -webkit-backdrop-filter: blur(30px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 10px 20px; border-radius: 50px;
     display: flex; align-items: center; gap: 12px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.1);
@@ -145,54 +104,21 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
 .search-bar i { color: #ccc; }
 .search-bar:focus-within { background: rgba(10, 10, 15, 0.6); width: 90%; border-color: rgba(255,255,255,0.4); }
 
-/* Сортировка */
-.sort-row { display: flex; justify-content: center; margin-top: 10px; pointer-events: auto; }
-
-#sortSelect { 
-    appearance: none; -webkit-appearance: none;
-    background-color: rgba(10, 10, 15, 0.3); 
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.15); color: white; 
-    padding: 6px 30px 6px 15px; border-radius: 15px; outline: none; font-size: 0.85rem; font-weight: 500;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat; background-position: right 10px center; background-size: 12px;
-}
-#sortSelect option { background-color: #1c1c1e; color: white; }
-
-/* === СПИСОК === */
+/* === ANIME LIST === */
 .anime-list { display: flex; flex-direction: column; gap: 12px; }
 
 .anime-card {
-    /* ... ваши старые настройки (padding, display, gap и т.д.) оставьте как есть ... */
-    padding: 12px 15px; 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    cursor: pointer;
-    will-change: transform; 
-    
-    /* Это хак, который включает аппаратное ускорение на старых WebKit движках */
+    padding: 12px 15px;
+    display: flex; align-items: center; gap: 15px;
+    cursor: pointer; will-change: transform;
     transform: translateZ(0);
-    
-    /* Фон по умолчанию */
-    background: rgba(0, 0, 0, 0.5); 
-    
-    /* Эти фильтры оставляем */
-    backdrop-filter: blur(15px); 
-    -webkit-backdrop-filter: blur(15px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-
-    /* === ГЛАВНОЕ ИЗМЕНЕНИЕ ЗДЕСЬ === */
-    /* Мы говорим: "Меняй фон, трансформацию, тень и границы за 0.3 секунды" */
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-                background-color 0.3s ease,
-                box-shadow 0.3s ease,
-                border-color 0.3s ease;
-    
-    /* Убедитесь, что тут нет слова 'forwards' */
-    animation: slideUp 0.4s ease; 
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    animation: slideUp 0.4s ease;
 }
 .anime-card:active { transform: scale(0.98); background: rgba(0, 0, 0, 0.7); }
 
@@ -202,7 +128,7 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
 .card-meta { font-size: 0.8rem; color: var(--text-sec); }
 .tag { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 6px; color: #ddd; font-weight: 500; }
 
-.card-rating { 
+.card-rating {
     flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
     background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05);
     width: 45px; height: 45px; border-radius: 12px;
@@ -210,7 +136,26 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
 .star { color: var(--gold); font-size: 0.8rem; margin-bottom: 2px; }
 .rating-num { font-weight: 700; font-size: 0.9rem; color: white; }
 
-/* === МОДАЛКА === */
+/* === INTERACTION STATES (Mobile vs PC) === */
+
+/* PC Hover */
+body.is-desktop .anime-card:hover {
+    transform: scale(1.05) translateZ(0) !important;
+    z-index: 100;
+    background-color: rgba(20, 20, 25, 0.9);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.is-desktop .anime-card { transform: scale(0.95); transition: transform 0.3s ease; }
+
+/* Mobile (Fisheye Logic) */
+.is-mobile .anime-card { transform: scale(0.85); transition: transform 0.3s ease; }
+.is-mobile .anime-card:hover { transform: scale(0.85); }
+.is-mobile .anime-card:active { transform: scale(0.90); }
+.disable-hover .anime-card { pointer-events: none; }
+
+/* === MODAL === */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px); z-index: 2000;
@@ -221,11 +166,9 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
 
 .modal-content {
     width: 100%; max-width: 450px; padding: 25px;
-    background: #15151a; 
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 24px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    color: white;
+    background: #15151a;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6); color: white;
     transform: scale(0.95); transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .modal-overlay.active .modal-content { transform: scale(1); }
@@ -237,286 +180,109 @@ h1 { font-size: 1.2rem; font-weight: 700; margin: 0; color: white; text-shadow: 
 .input-group { margin-bottom: 20px; }
 .input-group label { color: #aaa; font-size: 0.85rem; font-weight: 500; margin-bottom: 8px; display: block; }
 
-.glass-input { 
-    width: 100%; padding: 14px; 
-    background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); 
-    border-radius: 12px; color: white; outline: none; font-size: 1rem; transition: 0.2s; 
+.glass-input {
+    width: 100%; padding: 14px;
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; color: white; outline: none; font-size: 1rem; transition: 0.2s;
 }
 .glass-input:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); }
-
-select.glass-input {
-    appearance: none; -webkit-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;
-    padding-right: 40px; color: white; font-weight: 500;
-}
-option { background-color: #1c1c1e; color: white; }
 
 .save-btn { width: 100%; padding: 16px; background: var(--primary-gradient); color: white; border: none; border-radius: 16px; font-weight: 600; font-size: 1rem; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3); }
 .delete-btn { width: 100%; padding: 16px; background: rgba(255, 69, 58, 0.15); color: var(--danger); border: none; border-radius: 16px; font-weight: 600; margin-top: 10px; cursor: pointer; }
 
-/* === FAB (КНОПКА ДОБАВИТЬ) === */
-.fab-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateZ(0); z-index: 1500; 
-    will-change: transform; }
+/* === FAB BUTTON === */
+.fab-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateZ(0); z-index: 1500; will-change: transform; }
 .fab {
-    /* === РАЗМЕР И ФОРМА === */
-    width: 60px;       /* Фиксированный размер */
-    height: 60px;
-    border-radius: 50%; /* Идеальный круг */
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;        /* Убираем старые отступы */
-    
-    /* === СТЕКЛЯННЫЙ СТИЛЬ === */
-    /* Используем те же принципы, что и в поиске, но чуть прозрачнее */
-    background: rgba(20, 20, 25, 0.3); 
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    
-    /* Яркая тонкая рамка, чтобы кнопка не потерялась на фоне контента */
+    width: 60px; height: 60px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+    background: rgba(20, 20, 25, 0.3);
+    backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    
-    /* Глубокая тень для объема */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    
-    color: white;
-    font-size: 1.6rem; /* Иконка покрупнее */
-    cursor: pointer;
+    color: white; font-size: 1.6rem; cursor: pointer;
     transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
 }
-
-/* Эффект нажатия: кнопка чуть вдавливается и светлеет */
-.fab:active {
-    transform: scale(0.9);
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Опционально: на ПК при наведении легкое свечение */
+.fab:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.5); }
 @media (hover: hover) {
-    .fab:hover {
-        background: rgba(20, 20, 25, 0.5);
-        border-color: rgba(255, 255, 255, 0.6);
-        box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15);
-    }
+    .fab:hover { background: rgba(20, 20, 25, 0.5); border-color: rgba(255, 255, 255, 0.6); box-shadow: 0 10px 40px rgba(255, 255, 255, 0.15); }
 }
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-/* === ЭФФЕКТ "РЫБИЙ ГЛАЗ" ДЛЯ ТЕЛЕФОНОВ === */
-.is-mobile .anime-card {
-    transition: background-color 0.3s, box-shadow 0.3s;
-    will-change: transform;
-}
-
-/* === ХОВЕР ЭФФЕКТ ДЛЯ ПК === */
-body.is-desktop .anime-card:hover {
-    /* Добавляем !important, чтобы перебить JS-скрипт скролла */
-    transform: scale(1.02) translateZ(0) !important; 
-    
-    z-index: 100; 
-    background-color: rgba(20, 20, 25, 0.9); 
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6); 
-    border-color: rgba(255, 255, 255, 0.3); 
-}
-
-/* Когда на body висит этот класс, отключаем взаимодействие с карточками */
-.disable-hover .anime-card {
-    pointer-events: none; 
-}
-
-/* =========================================
-   ВЕРСИЯ ДЛЯ ПК (класс .is-desktop)
-   ========================================= */
-.is-desktop .anime-card {
-    transform: scale(0.95); /* Уменьшаем всего на 5%, как ты хотел */
-    transition: transform 0.3s ease;
-}
-
-/* Hover работает ТОЛЬКО если это ПК */
-.is-desktop .anime-card:hover {
-    transform: scale(1.05); /* Увеличение при наведении */
-    z-index: 10;
-}
-
-/* =========================================
-   ВЕРСИЯ ДЛЯ ТЕЛЕФОНА (класс .is-mobile)
-   ========================================= */
-.is-mobile .anime-card {
-    transform: scale(0.85); /* Уменьшаем сильно (15%) */
-    transition: transform 0.3s ease;
-}
-
-/* НА ТЕЛЕФОНЕ ОТКЛЮЧАЕМ HOVER */
-/* Чтобы карточка не застревала в увеличенном состоянии после тапа */
-.is-mobile .anime-card:hover {
-    transform: scale(0.85); /* При "наведении" пальцем размер не меняется */
-}
-
-/* Можно добавить эффект нажатия для телефона (опционально) */
-.is-mobile .anime-card:active {
-    transform: scale(0.90); /* Чуть-чуть реагирует на нажатие */
-}
-
-/* === ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СЕЛЕКТОВ === */
+/* === CUSTOM SELECT (DROPDOWN) === */
 .custom-select {
-    position: relative;
-    user-select: none;
-    width: 100%;
-    outline: none;
-    -webkit-tap-highlight-color: transparent;
+    position: relative; user-select: none; width: 100%; outline: none; -webkit-tap-highlight-color: transparent;
 }
 
 .select-trigger {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: 0.3s;
-    color: white;
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer; transition: 0.3s; color: white;
 }
-
-.select-trigger i {
-    font-size: 0.8rem;
-    transition: transform 0.3s;
-    margin-left: 10px;
-}
-
-/* Поворот стрелки */
+.select-trigger i { font-size: 0.8rem; transition: transform 0.3s; margin-left: 10px; }
 .custom-select.open .select-trigger i { transform: rotate(180deg); }
 
-/* Выпадающий список (общий) */
-/* Выпадающий список (общий) */
 .select-options {
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 2000;
-    
-    /* === ИСПРАВЛЕНИЕ: ЖИДКОЕ СТЕКЛО === */
-    /* Делаем фон полупрозрачным и темным */
-    background: rgba(20, 20, 25, 0.6); 
-    
-    /* Сильное размытие + насыщенность (эффект премиум стекла) */
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    
-    /* Тонкая светлая обводка */
+    position: absolute; left: 0; right: 0; z-index: 2000;
+    background: rgba(20, 20, 25, 0.6); /* Жидкое стекло */
+    backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    
-    border-radius: 16px; /* Чуть больше скругление */
-    
-    /* Глубокая тень для отрыва от фона */
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-    
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
-    transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); /* Пружинистая анимация */
-    overflow: hidden;
+    border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    opacity: 0; visibility: hidden; transform: translateY(10px);
+    transition: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); overflow: hidden;
 }
 
-.custom-select.open .select-options {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(5px); /* Небольшой отступ от кнопки */
-}
+.custom-select.open .select-options { opacity: 1; visibility: visible; transform: translateY(5px); }
 
 .option {
-    padding: 12px 16px; /* Чуть просторнее */
-    color: rgba(255, 255, 255, 0.8);
-    cursor: pointer;
-    transition: 0.2s;
-    /* Разделитель едва заметный */
-    border-bottom: 1px solid rgba(255,255,255,0.03); 
-    font-size: 0.9rem;
-    font-weight: 500;
+    padding: 12px 16px; color: rgba(255, 255, 255, 0.8); cursor: pointer; transition: 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.9rem; font-weight: 500;
 }
-
 .option:last-child { border-bottom: none; }
+.option:hover { background: rgba(255, 255, 255, 0.15); color: white; padding-left: 20px; }
 
-/* Ховер: не просто серый, а светлое стекло */
-.option:hover { 
-    background: rgba(255, 255, 255, 0.15); 
-    color: white;
-    padding-left: 20px; /* Легкий сдвиг вправо при наведении */
+/* STYLE: SORTING */
+.custom-select.sort-style {
+    width: fit-content; min-width: 200px; margin: 0; pointer-events: auto;
 }
 
-/* === ВАРИАНТ 1: СОРТИРОВКА (в шапке) === */
 .sort-style .select-trigger {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px; /* Более округлый */
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 .sort-style .select-trigger:hover {
-    background: rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 4px 15px rgba(255,255,255,0.1);
 }
 
-/* === ВАРИАНТ 2: ИНПУТ (в модалке) === */
+.sort-style .select-options {
+    width: 100%; text-align: left;
+}
+
+/* STYLE: INPUT (IN MODAL) */
 .input-style .select-trigger {
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px; /* Как у других инпутов */
-    padding: 14px;
-    font-size: 1rem;
+    border-radius: 12px; padding: 14px; font-size: 1rem;
 }
-.input-style .select-trigger:hover {
-    border-color: var(--primary); 
-    background: rgba(0, 0, 0, 0.4);
-}
-
+.input-style .select-trigger:hover { border-color: var(--primary); background: rgba(0, 0, 0, 0.4); }
 .stars { color: #ffd60a; margin-left: 5px; }
 
-/* === ИСПРАВЛЕНИЕ СОРТИРОВКИ === */
-.custom-select.sort-style {
-    /* 1. Убираем растягивание на всю ширину */
-    width: fit-content; 
-    min-width: 220px; /* Минимальная ширина, чтобы текст влезал */
-    
-    /* 2. Центрируем блок */
-    margin: 10px auto 0 auto; 
-    
-    /* 3. ВКЛЮЧАЕМ КЛИКИ (Важно! Иначе через search-section не нажмется) */
-    pointer-events: auto; 
+/* === MOBILE SPECIFIC (SORTING) === */
+.is-mobile .custom-select.sort-style {
+    width: auto !important; min-width: 0 !important; max-width: 90%; margin: 0 !important;
 }
 
-/* На мобильных (если экран узкий) можно дать чуть больше места */
-@media (max-width: 480px) {
-    .custom-select.sort-style {
-        width: 90%; /* На телефонах пусть будет почти во всю ширину */
-        min-width: auto;
-    }
+.is-mobile .sort-style .select-trigger {
+    padding: 6px 16px; font-size: 0.85rem; border-radius: 50px;
+    justify-content: center; background: rgba(255, 255, 255, 0.08);
 }
+.is-mobile .sort-style .select-trigger i { margin-left: 8px; font-size: 0.75rem; }
 
-/* Исправляем позицию выпадающего списка у сортировки, чтобы он был ровно под кнопкой */
-.sort-style .select-options {
-    width: 100%; /* Ширина списка равна ширине кнопки */
-    text-align: left; /* Текст внутри выровнять по левому краю */
+.is-mobile .sort-style .select-options {
+    width: max-content; min-width: 100%; left: 50%; transform: translateX(-50%) translateY(10px);
 }
-
-/* На мобильных делаем кнопку компактной */
-@media (max-width: 480px) {
-    .custom-select.sort-style {
-        /* Было: width: 90%; */
-        /* Стало: fit-content (ширина ровно по тексту) */
-        width: fit-content; 
-        
-        /* Можно убрать min-width, чтобы кнопка могла быть совсем маленькой */
-        min-width: auto;
-        
-        /* Но ограничим, чтобы она не вылезала за края, если текст супер-длинный */
-        max-width: 90%;
-    }
-    
-    /* Чуть уменьшим шрифт на телефоне, чтобы выглядело аккуратнее */
-    .sort-style .select-trigger {
-        font-size: 0.8rem;
-        padding: 6px 12px;
-    }
+.is-mobile .custom-select.open.sort-style .select-options {
+    transform: translateX(-50%) translateY(5px);
 }
