@@ -64,7 +64,29 @@ body.is-desktop .anime-card:hover {
     }
 }
 
-.app-container { max-width: 600px; margin: 0 auto; padding: 20px; }
+.app-container { 
+    width: 100%;
+    /* На телефонах оставляем узким, как было */
+    max-width: 600px; 
+    margin: 0 auto; 
+    padding: 20px; 
+    transition: max-width 0.3s ease; /* Чтобы при повороте экрана ширина менялась плавно */
+}
+
+/* === НАСТРОЙКИ ДЛЯ ГОРИЗОНТАЛЬНОГО РЕЖИМА И ПК === */
+
+/* 1. Если это ПК (определенный скриптом) */
+body.is-desktop .app-container {
+    max-width: 1200px; /* Растягиваем до 1200px (или поставь 90%, если хочешь еще шире) */
+}
+
+/* 2. Если это просто телефон, но повернутый горизонтально */
+@media (orientation: landscape) and (max-height: 600px) {
+    .app-container {
+        max-width: 100%; /* На весь экран */
+        padding: 10px 40px; /* Чуть больше отступов по бокам */
+    }
+}
 
 /* === HEADER === */
 header {
@@ -240,13 +262,56 @@ option { background-color: #1c1c1e; color: white; }
 @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
 /* === ЭФФЕКТ "РЫБИЙ ГЛАЗ" ДЛЯ ТЕЛЕФОНОВ === */
-body.is-mobile .anime-card {
-    /* Отключаем плавную анимацию размера на телефоне, 
-       иначе скролл будет казаться "ватным" и запаздывающим.
-       Оставляем плавность только для цвета/тени. */
+.is-mobile .anime-card {
     transition: background-color 0.3s, box-shadow 0.3s;
-    
-    /* Сообщаем браузеру, что этот элемент будет часто менять размер,
-       чтобы он перенес вычисления на видеокарту */
     will-change: transform;
+}
+
+/* === ХОВЕР ЭФФЕКТ ДЛЯ ПК === */
+body.is-desktop .anime-card:hover {
+    /* Добавляем !important, чтобы перебить JS-скрипт скролла */
+    transform: scale(1.08) translateZ(0) !important; 
+    
+    z-index: 100; 
+    background-color: rgba(20, 20, 25, 0.9); 
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6); 
+    border-color: rgba(255, 255, 255, 0.3); 
+}
+
+/* Когда на body висит этот класс, отключаем взаимодействие с карточками */
+.disable-hover .anime-card {
+    pointer-events: none; 
+}
+
+/* =========================================
+   ВЕРСИЯ ДЛЯ ПК (класс .is-desktop)
+   ========================================= */
+.is-desktop .anime-card {
+    transform: scale(0.95); /* Уменьшаем всего на 5%, как ты хотел */
+    transition: transform 0.3s ease;
+}
+
+/* Hover работает ТОЛЬКО если это ПК */
+.is-desktop .anime-card:hover {
+    transform: scale(1.05); /* Увеличение при наведении */
+    z-index: 10;
+}
+
+/* =========================================
+   ВЕРСИЯ ДЛЯ ТЕЛЕФОНА (класс .is-mobile)
+   ========================================= */
+.is-mobile .anime-card {
+    transform: scale(0.85); /* Уменьшаем сильно (15%) */
+    transition: transform 0.3s ease;
+}
+
+/* НА ТЕЛЕФОНЕ ОТКЛЮЧАЕМ HOVER */
+/* Чтобы карточка не застревала в увеличенном состоянии после тапа */
+.is-mobile .anime-card:hover {
+    transform: scale(0.85); /* При "наведении" пальцем размер не меняется */
+}
+
+/* Можно добавить эффект нажатия для телефона (опционально) */
+.is-mobile .anime-card:active {
+    transform: scale(0.90); /* Чуть-чуть реагирует на нажатие */
 }

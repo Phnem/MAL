@@ -164,7 +164,7 @@ function renderList(data) {
     });
 
     // === ВОТ ТУТ НОВАЯ СТРОКА ===
-    requestAnimationFrame(initMobileScrollEffect);
+    requestAnimationFrame(updateFisheyeEffect);
 }
 
 // === ПОИСК И СОРТИРОВКА ===
@@ -265,44 +265,67 @@ function resetData() {
     }
 }
 
-// === ЭФФЕКТ FISHEYE (ПАПИРУС) ДЛЯ ТЕЛЕФОНОВ ===
-function initMobileScrollEffect() {
-    // Если это не телефон, выходим и ничего не делаем
-    if (!document.body.classList.contains('is-mobile')) return;
-
+// === ЭФФЕКТ FISHEYE (РЫБИЙ ГЛАЗ) ДЛЯ ВСЕХ ===
+// === ЭФФЕКТ FISHEYE (ОБНОВЛЕННЫЙ ПОД ШИРОКИЙ ЭКРАН) ===
+function updateFisheyeEffect() {
     const cards = document.querySelectorAll('.anime-card');
-    const centerY = window.innerHeight / 2; // Центр экрана по вертикали
-    const maxDist = window.innerHeight / 1.5; // Дистанция, где эффект достигает максимума (края)
+    const height = window.innerHeight; // Высота экрана сейчас
+    const centerY = height / 2;
+    
+    // === ИЗМЕНЕНИЕ ЗДЕСЬ ===
+    // Раньше было фиксировано 110px. 
+    // Теперь это 25% от высоты экрана.
+    // На телефоне это будет ~200px, на ПК ~270px (зона 100% масштаба станет шире)
+    const safeZone = height * 0.25; 
+    
+    // Максимальная дистанция тоже зависит от экрана
+    const maxDist = height * 0.6; 
 
     cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        // Центр конкретной карточки
-        const cardCenterY = rect.top + (rect.height / 2);
+        // На ПК при наведении отключаем сжатие
+        if (card.matches(':hover')) {
+             card.style.transform = ''; 
+             return;
+        }
 
-        // Расстояние от центра экрана до центра карточки (по модулю)
+        const rect = card.getBoundingClientRect();
+        const cardCenterY = rect.top + (rect.height / 2);
         const distance = Math.abs(centerY - cardCenterY);
 
         let scale = 1;
 
-        // Если карточка в пределах зоны действия эффекта
-        if (distance < maxDist) {
-            // Считаем коэффициент уменьшения (0..1)
-            const factor = distance / maxDist;
-            // Уменьшаем от 1.0 до 0.9 (то есть на 10%)
-            scale = 1 - (factor * 0.1); 
-        } else {
-            // Если совсем далеко — фиксируем минимальный размер
-            scale = 0.9;
+        if (distance > safeZone) {
+            const activeDistance = distance - safeZone;
+            const effectiveMax = maxDist - safeZone;
+
+            let factor = activeDistance / effectiveMax;
+            if (factor > 1) factor = 1; 
+
+            // Сжимаем до 85% по краям
+            scale = 1 - (factor * 0.15); 
         }
 
-        // Применяем масштаб
         card.style.transform = `scale(${scale})`;
     });
 }
 
-// Запускаем эффект при скролле (используем requestAnimationFrame для плавности 60 FPS)
+// Запускаем эффект при скролле (без проверок)
 window.addEventListener('scroll', () => {
-    if (document.body.classList.contains('is-mobile')) {
-        window.requestAnimationFrame(initMobileScrollEffect);
-    }
+    window.requestAnimationFrame(updateFisheyeEffect);
 });
+
+let isScrolling;
+
+window.addEventListener('scroll', function() {
+    // 1. Добавляем класс, отключающий ховер
+    document.body.classList.add('disable-hover');
+
+    // 2. Очищаем предыдущий таймер (если скролл продолжается)
+    window.clearTimeout(isScrolling);
+
+    // 3. Запускаем новый таймер
+    isScrolling = setTimeout(function() {
+        // Этот код сработает через 200мс после ОСТАНОВКИ скролла
+        document.body.classList.remove('disable-hover');
+    }, 200);
+}, false);
