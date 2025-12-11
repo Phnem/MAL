@@ -1,14 +1,17 @@
-const CACHE_NAME = 'site-v4'; // Поменяли версию, чтобы обновить кэш у пользователей
+const CACHE_NAME = 'site-v5'; // <-- ВАЖНО: Новая версия, чтобы сбросить старый глючный кэш
+
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js',
-  '/192.png',
-  '/512.png',
-  '/bpV.png', // Добавили вертикальный фон
-  '/bpH.png'  // Добавили горизонтальный фон
+  './',              // Точка в начале важна!
+  './index.html',
+  './style.css',
+  './script.js',
+  './192.png',
+  './512.png',
+  './bpV.png',
+  './bpH.png'
 ];
+
+// Остальной код sw.js можно не трогать, но убедись, что install/activate/fetch остались ниже.
 
 // 1. УСТАНОВКА: кешируем статику (оболочку сайта)
 self.addEventListener('install', (event) => {

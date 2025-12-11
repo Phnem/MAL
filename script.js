@@ -31,8 +31,8 @@ const initDataJSBackgroundAttachmentFixed = () => {
 
 // === ДАННЫЕ ===
 const BLOB_ID = '019ae59e-d6cd-78dc-9d94-edb43c4c2d9c'; 
-// Используем corsproxy.io, так как напрямую JsonBlob блокирует запросы с GitHub Pages
-const API_URL = 'https://corsproxy.io/?' + encodeURIComponent('https://jsonblob.com/api/jsonBlob/' + BLOB_ID);
+// Используем надежный прокси allorigins
+const API_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://jsonblob.com/api/jsonBlob/' + BLOB_ID);
 let animeData = [];
 
 const animeListEl = document.getElementById('animeList');
