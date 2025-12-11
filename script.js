@@ -31,7 +31,7 @@ const initDataJSBackgroundAttachmentFixed = () => {
 
 // === ДАННЫЕ ===
 const BLOB_ID = '019ae59e-d6cd-78dc-9d94-edb43c4c2d9c'; 
-const API_URL = 'https://corsproxy.io/?' + encodeURIComponent('https://jsonblob.com/api/jsonBlob/' + BLOB_ID);
+const API_URL = 'https://jsonblob.com/api/jsonBlob/' + BLOB_ID;
 let animeData = [];
 
 const animeListEl = document.getElementById('animeList');
@@ -68,7 +68,7 @@ async function loadData() {
         renderList(animeData);
     } catch (error) {
         console.error(error);
-        animeListEl.innerHTML = '<div style="text-align:center; color:#ff5e57; margin-top:50px;">Ошибка связи.<br>Отключи AdBlock.</div>';
+       animeListEl.innerHTML = '<div style="text-align:center; color:#ff5e57; margin-top:50px;">Сервер недоступен.<br>Попробуй позже.</div>';
     }
 }
 
