@@ -1,4 +1,4 @@
-const CACHE_NAME = 'site-v3'; // Поменяли версию, чтобы обновить кэш у пользователей
+const CACHE_NAME = 'site-v4'; // Поменяли версию, чтобы обновить кэш у пользователей
 const ASSETS = [
   '/',
   '/index.html',
